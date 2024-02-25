@@ -5,22 +5,7 @@ import time
 
 # Configure customtkinter
 ctk.set_appearance_mode("dark")  # Options: "System" (default), "Dark", "Light"
-ctk.set_default_color_theme("blue")
-
-def show_splash_screen(duration=3000): #note: idk why but there is some text i thought i removed on the splash screen that is still there. idk lol i suck with code.
-    splash_root = ctk.CTk()
-    splash_root.overrideredirect(True)
-    splash_root.geometry("600x400")
-    
-    splash_image = PhotoImage(file=r'D:\Documents\HACKY STUFF\UselessPromptBuilder\uselesssplash.png')
-    splash_label = ctk.CTkLabel(splash_root, image=splash_image)
-    splash_label.image = splash_image
-    splash_label.pack(expand=True)
-    
-    splash_root.update()
-    time.sleep(duration / 1000)
-    splash_root.destroy()
-
+ctk.set_default_color_theme("blue")  # Try "dark-blue", "green" etc. for different themes
 
 class UselessPromptBuilder(ctk.CTk):
     def __init__(self):
@@ -56,6 +41,7 @@ class UselessPromptBuilder(ctk.CTk):
         
     def go_back(self, page_index, data):
         self.data[page_index] = data  # Save the current input.
+        # Then, navigate back.
 
     def create_page(self, page_index):
         for widget in self.container.winfo_children():
@@ -88,6 +74,7 @@ class UselessPromptBuilder(ctk.CTk):
         self.data[page_index] = data
         print("Current completed prompts:", self.completed_prompts)
         next_page = page_index + 1
+        # Assuming this updates self.completed_prompts somewhere
 
         if next_page < len(self.pages_info):
             self.create_page(next_page)
@@ -128,11 +115,10 @@ class UselessPromptBuilder(ctk.CTk):
         """Load completed prompts from a file."""
         try:
             with open("completed_prompts.txt", "r") as file:
-                self.completed_prompts = [line.strip().replace("|||", "\n") for line in file.readlines()]
+                self.completed_prompts = [line.strip().replace("|||", "\n") for line in file.readlines()]  # Replace delimiter back with newlines
         except FileNotFoundError:
             self.completed_prompts = []                
 
 if __name__ == "__main__":
-    show_splash_screen(3000)
     app = UselessPromptBuilder()
     app.mainloop()
